@@ -1,11 +1,11 @@
 package DB
 
 import (
-	"fmt"
-	"log"
+        "log"
 	"os"
+
 	"github.com/joho/godotenv"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"HR_module/structs"
 )
@@ -16,14 +16,9 @@ func ConnectDB()*gorm.DB{
 		log.Fatal("Error loading .env file")
 	}
 
-	dbUser := os.Getenv("DB_User")
-	dbPass := os.Getenv("DB_Pass")
-	dbPort := os.Getenv("DB_Port")
-	dbHost := os.Getenv("DB_Host")
-	dbName := os.Getenv("DB_Name")
-	// Connect DB
-	dbn:=fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",dbUser,dbPass,dbHost,dbPort,dbName)
-	db, err := gorm.Open(mysql.Open(dbn), &gorm.Config{})
+	dbURL := os.Getenv("DB_URL")
+
+	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
     if err != nil {
 		log.Fatal(err)
 	}
